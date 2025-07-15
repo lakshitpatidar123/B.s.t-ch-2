@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Chapter 2 - Class 11 BST</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --primary: #6c5ce7;
+      --secondary: #a29bfe;
+      --dark: #2d3436;
+      --darker: #1e272e;
+      --light: #f5f6fa;
+      --accent: #fd79a8;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Poppins', 'Segoe UI', sans-serif;
+      background: var(--darker);
+      color: var(--light);
+      line-height: 1.8;
+      scroll-behavior: smooth;
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      padding: 25px;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      border-bottom: 3px solid var(--accent);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 2.2em;
+      animation: floatText 3s ease-in-out infinite;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    @keyframes floatText {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+      100% { transform: translateY(0px); }
+    }
+
+    #clock {
+      position: absolute;
+      right: 20px;
+      top: 20px;
+      font-size: 18px;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 8px 15px;
+      border-radius: 50px;
+      font-weight: bold;
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      color: white;
+      display: flex;
+      align-items: center;
+    }
+
+    #clock::before {
+      content: '';
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      background: var(--accent);
+      border-radius: 50%;
+      margin-right: 8px;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.3); opacity: 0.7; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 30px auto;
+      padding: 20px;
+    }
+
+    .section {
+      background: linear-gradient(to right, rgba(44, 62, 80, 0.7), rgba(76, 161, 175, 0.1));
+      padding: 25px;
+      border-radius: 15px;
+      margin-bottom: 30px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.6s ease-out;
+      border-left: 4px solid var(--primary);
+      backdrop-filter: blur(8px);
+    }
+
+    .section:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+    }
+
+    .section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    h2 {
+      color: var(--secondary);
+      margin-top: 0;
+      font-size: 1.6em;
+      position: relative;
+      padding-bottom: 10px;
+    }
+
+    h2::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 50px;
+      height: 3px;
+      background: var(--accent);
+      border-radius: 3px;
+    }
+
+    ul {
+      padding-left: 25px;
+    }
+
+    li {
+      margin-bottom: 10px;
+      position: relative;
+    }
+
+    li::before {
+      content: '→';
+      color: var(--accent);
+      position: absolute;
+      left: -20px;
+    }
+
+    strong {
+      color: var(--secondary);
+      display: inline-block;
+      margin: 15px 0 5px;
+      font-size: 1.1em;
+    }
+
+    p {
+      margin-bottom: 20px;
+    }
+
+    @media(max-width: 600px) {
+      #clock {
+        position: static;
+        display: inline-block;
+        margin: 15px auto 0;
+        text-align: center;
+      }
+      
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>📘 Chapter 2: Forms of Business Organisation</h1>
+    <div id="clock">
+      <span id="time"></span>
+      <span id="ampm"></span>
+    </div>
+  </header>
+
+  <div class="container">
+
+    <div class="section">
+      <h2>🔹 1. Sole Proprietorship</h2>
+      <p>A form of business owned and controlled by a single person.</p>
+      <strong>Features:</strong>
+      <ul>
+        <li>Single Ownership</li>
+        <li>Unlimited Liability</li>
+        <li>Control by Owner</li>
+        <li>No Separate Legal Entity</li>
+        <li>Lack of Continuity</li>
+        <li>Quick Decisions</li>
+      </ul>
+      <strong>Advantages:</strong>
+      <ul>
+        <li>Simple and low-cost</li>
+        <li>Full profit to the owner</li>
+        <li>Flexible & personal attention</li>
+      </ul>
+      <strong>Limitations:</strong>
+      <ul>
+        <li>Limited capital</li>
+        <li>Unlimited liability</li>
+        <li>No continuity</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>🔹 2. Hindu Undivided Family (HUF)</h2>
+      <p>Business by members of a Hindu joint family.</p>
+      <strong>Features:</strong>
+      <ul>
+        <li>Only Hindus, by birth</li>
+        <li>Karta (eldest male) manages</li>
+        <li>Unlimited liability of Karta</li>
+        <li>Continues after Karta's death</li>
+      </ul>
+      <strong>Advantages:</strong>
+      <ul>
+        <li>Continuity & control</li>
+        <li>Limited liability of members</li>
+      </ul>
+      <strong>Limitations:</strong>
+      <ul>
+        <li>Limited capital</li>
+        <li>Karta may misuse power</li>
+        <li>Only males included</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>🔹 3. Partnership</h2>
+      <p>A business owned by two or more persons.</p>
+      <strong>Features:</strong>
+      <ul>
+        <li>Formed by agreement (Deed)</li>
+        <li>Profit/loss sharing</li>
+        <li>Unlimited liability</li>
+        <li>Mutual agency, no legal entity</li>
+      </ul>
+      <strong>Types:</strong>
+      <ul>
+        <li>General, Limited, At Will, Particular</li>
+      </ul>
+      <strong>Deed Includes:</strong>
+      <ul>
+        <li>Partner names, capital, ratio, duties</li>
+      </ul>
+      <strong>Advantages:</strong>
+      <ul>
+        <li>More capital, shared risk</li>
+        <li>Easy to form, combined skills</li>
+      </ul>
+      <strong>Limitations:</strong>
+      <ul>
+        <li>Disputes, no continuity</li>
+        <li>Unlimited liability</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>🔹 4. Co-operative Society</h2>
+      <p>Voluntary association for mutual benefit.</p>
+      <strong>Features:</strong>
+      <ul>
+        <li>Open to all, one vote per member</li>
+        <li>Service motive, legal entity</li>
+        <li>Govt. support</li>
+      </ul>
+      <strong>Types:</strong>
+      <ul>
+        <li>Consumer, Producer, Credit, Housing</li>
+      </ul>
+      <strong>Advantages:</strong>
+      <ul>
+        <li>Easy to form, limited liability</li>
+        <li>Helps weaker sections</li>
+      </ul>
+      <strong>Limitations:</strong>
+      <ul>
+        <li>Limited resources, motivation</li>
+        <li>Inefficient management</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>🔹 5. Joint Stock Company</h2>
+      <p>Owned by shareholders, managed by directors.</p>
+      <strong>Features:</strong>
+      <ul>
+        <li>Separate legal entity</li>
+        <li>Limited liability, perpetual life</li>
+        <li>Transferable shares</li>
+      </ul>
+      <strong>Types:</strong>
+      <ul>
+        <li>Private: 2-200, can't invite public</li>
+        <li>Public: Min 7, can raise publicly</li>
+      </ul>
+      <strong>Key Docs:</strong>
+      <ul>
+        <li>MOA, AOA, Prospectus</li>
+      </ul>
+      <strong>Advantages:</strong>
+      <ul>
+        <li>Large capital, efficient management</li>
+        <li>Perpetual life, limited liability</li>
+      </ul>
+      <strong>Limitations:</strong>
+      <ul>
+        <li>Complex formation, legal formalities</li>
+        <li>Slower decisions, less secrecy</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>🔹 6. Public Sector Enterprises</h2>
+      <p>Owned & operated by Govt.</p>
+      <strong>Forms:</strong>
+      <ul>
+        <li>Departmental (e.g. Railways)</li>
+        <li>Statutory Corp (e.g. LIC)</li>
+        <li>Govt. Company (e.g. BHEL)</li>
+      </ul>
+      <strong>Advantages:</strong>
+      <ul>
+        <li>Serves public interest, job creator</li>
+        <li>Balanced development</li>
+      </ul>
+      <strong>Limitations:</strong>
+      <ul>
+        <li>Political interference</li>
+        <li>Inefficiency, less flexibility</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- Clock Script -->
+  <script>
+    function updateClock() {
+      const now = new Date();
+      let hours = now.getHours();
+      const minutes = now.getMinutes().toString().padStart(2, '0');
+      const seconds = now.getSeconds().toString().padStart(2, '0');
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      
+      hours = hours % 12;
+      hours = hours ? hours : 12;
+      
+      const timeString = `${hours}:${minutes}:${seconds}`;
+      
+      document.getElementById('time').textContent = timeString;
+      document.getElementById('ampm').textContent = ampm;
+      
+      // Change color based on time of day
+      const clock = document.getElementById('clock');
+      if (hours >= 6 && hours < 18) {
+        clock.style.background = 'rgba(0, 0, 0, 0.3)';
+      } else {
+        clock.style.background = 'rgba(253, 121, 168, 0.2)';
+      }
+    }
+    
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // Scroll Animation Script
+    const sections = document.querySelectorAll('.section');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    sections.forEach(section => {
+      observer.observe(section);
+    });
+  </script>
+<footer>
+      <p>&copy;2025 By Lakshit | Fair Complete Kr Le Na</p>
+</footer>
+</body>
+</html>
